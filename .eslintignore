@@ -1,0 +1,8 @@
+/config
+/dist
+/node_modules
+
+jest.config.js
+rollup.config.js
+styleguide.config.js
+webpack.config.js

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "declaration": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": ["es2017", "es7", "es6", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "strict": true,
+    "target": "es5",
+    "noImplicitAny": false,
+    "noImplicitThis": false
+  },
+  "exclude": [
+    "config",
+    "dist",
+    "node_modules",
+    "src/**/*.example.tsx",
+    "src/**/*.spec.*"
+  ],
+  "includes": ["src"]
+}
