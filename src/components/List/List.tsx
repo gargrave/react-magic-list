@@ -4,7 +4,7 @@ import {
   makeContainerStyles,
   makeListWrapperStyles,
   makeRowStyles,
-} from './styleHelpers'
+} from './styles.helpers'
 import { RowProps } from './types'
 
 export type DebugOptions = {
