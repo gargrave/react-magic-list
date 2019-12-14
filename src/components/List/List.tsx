@@ -43,8 +43,7 @@ export function List<T>({
   ])
 
   const [state, setState] = React.useState<ListState>({
-    // TODO: find a default value for this that doesn't cut anything off; it is initially rendering ALL nodes
-    maxIdx: 100000,
+    maxIdx: visibleItemCount,
     minIdx: 0,
   })
   const { maxIdx, minIdx } = state
@@ -54,14 +53,10 @@ export function List<T>({
   const containerEl = React.useRef<HTMLDivElement>(null)
 
   /**
-   * Callback for handling scroll events
-   * The list will need to be re-calculated any time a scroll happens, and new items
-   * may or may not need to be rendered.
+   * Updates the min & max indices for which items should be rendered in our current viewport.
    */
-  const handleScroll = React.useCallback(
-    event => {
-      const { scrollTop } = event.target
-
+  const updateVisibleItems = React.useCallback(
+    (scrollTop = 0) => {
       const newMinIdx = Math.floor(scrollTop / itemHeight)
       const newMaxIdx = newMinIdx + visibleItemCount
 
@@ -70,6 +65,21 @@ export function List<T>({
     [itemHeight, visibleItemCount],
   )
 
+  /**
+   * Callback for handling scroll events
+   * The list will need to be re-calculated any time a scroll happens, and new items
+   * may or may not need to be rendered.
+   */
+  const handleScroll = React.useCallback(
+    event => {
+      updateVisibleItems(event.target.scrollTop)
+    },
+    [updateVisibleItems],
+  )
+
+  /**
+   * Effect handler for binding/unbinding scroll events on the container element
+   */
   React.useEffect(() => {
     const el = containerEl.current
 
