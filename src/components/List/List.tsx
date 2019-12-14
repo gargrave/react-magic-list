@@ -4,13 +4,17 @@ import {
   makeContainerStyles,
   makeListWrapperStyles,
   makeRowStyles,
-} from './styles'
+} from './styleHelpers'
 import { RowProps } from './types'
 
+export type DebugOptions = {
+  disableVirtualization?: boolean
+}
+
 export type ListProps<T> = {
+  debugOptions?: DebugOptions
   height: number
   itemHeight: number
-  itemMargin?: number
   items: T[]
   rowRenderer: (props: RowProps<T>) => React.ReactElement
 }
@@ -21,11 +25,14 @@ export type ListState = {
 }
 
 export function List<T>({
+  debugOptions = {},
   height,
-  itemHeight = 0,
+  itemHeight,
   items,
   rowRenderer,
 }: ListProps<T>) {
+  const { disableVirtualization = false } = debugOptions
+
   const containerStyles: React.CSSProperties = React.useMemo(
     () => makeContainerStyles({ height }),
     [height],
@@ -96,7 +103,9 @@ export function List<T>({
         {items.map((data, idx) => {
           // skip any rows that are outside our current viewport
           if (idx < minIdx || idx > maxIdx) {
-            return null
+            if (!disableVirtualization) {
+              return null
+            }
           }
 
           const top = idx * itemHeight

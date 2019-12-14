@@ -1,0 +1,16 @@
+@import '~milligram/dist/milligram.css';
+
+.listRow {
+  align-items: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  display: grid;
+  grid-template-columns: 20% auto;
+  height: 30px;
+  padding: 0;
+  padding-left: 8px;
+}
+
+.listRow__id {
+  font-weight: bold;
+}

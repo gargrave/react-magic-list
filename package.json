@@ -16,14 +16,13 @@
     "prebuild": "jest && yarn clean:dist && yarn build:types && yarn build:styles",
     "build": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:examples": "node ./src/scripts/buildExamples.js && yarn prettier:examples",
     "build:styles": "node ./src/scripts/buildStyles.js",
     "prettier:examples": "prettier --config ./.prettierrc --write 'src/components/List/*.md'",
     "release": "yarn build && yarn np --yolo && yarn styleguide:build",
     "lint": "eslint --ext .ts,.tsx ./src",
     "test": "jest --watch",
-    "styleguide": "yarn build:examples && styleguidist server",
-    "styleguide:build": "yarn build:examples && styleguidist build"
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
   },
   "peerDependencies": {
     "react": "^16.11.0",
@@ -61,6 +60,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.8.0",
     "loader-utils": "^1.2.3",
+    "milligram": "^1.3.0",
     "nanoid": "^2.1.6",
     "node-sass": "^4.13.0",
     "np": "^5.1.3",

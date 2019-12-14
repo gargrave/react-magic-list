@@ -13,12 +13,6 @@
     "noImplicitAny": false,
     "noImplicitThis": false
   },
-  "exclude": [
-    "config",
-    "dist",
-    "node_modules",
-    "src/**/*.example.tsx",
-    "src/**/*.spec.*"
-  ],
+  "exclude": ["config", "dist", "node_modules", "src/**/*.spec.*"],
   "includes": ["src"]
 }

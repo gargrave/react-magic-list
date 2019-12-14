@@ -1,4 +1,4 @@
 ```jsx
-import { Example } from './List.example'
+import { Example } from '../../styleguide/List.example'
 ;<Example />
 ```
