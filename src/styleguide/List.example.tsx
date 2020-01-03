@@ -70,6 +70,7 @@ const NonVirtualized = () => {
               height={320}
               itemHeight={30}
               items={rows}
+              overscanItems={10}
               rowRenderer={listRowProps => <Row {...listRowProps} />}
             />
           </div>
@@ -128,6 +129,7 @@ const Virtualized = () => {
               height={320}
               itemHeight={30}
               items={rows}
+              overscanItems={10}
               rowRenderer={listRowProps => <Row {...listRowProps} />}
             />
           </div>

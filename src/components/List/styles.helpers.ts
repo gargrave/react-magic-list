@@ -11,6 +11,7 @@ export const makeListWrapperStyles = ({
 }): CSSProperties => ({
   height: itemHeight * itemCount,
   position: 'relative',
+  // TODO: add a prop to set a static width
   width: '100%',
 })
 

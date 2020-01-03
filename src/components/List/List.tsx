@@ -18,6 +18,17 @@ export type ListProps<T> = {
   height: number
   itemHeight: number
   items: T[]
+  /**
+   * **(Optional)** Number of additional items outside the list window that should be rendered.
+   * This can be used to give yourself a "scroll buffer," so you don't see any gaps in the list
+   * if it scrolls too quickly.
+   *
+   * As the name suggests, this is _number of items in each direction_ to overscan, so a value of `10`
+   * here would potentially render 20 additional items.
+   *
+   * **Default: 0**
+   */
+  overscanItems?: number
   rowRenderer: (props: RowProps<T>) => React.ReactElement
 }
 
@@ -32,6 +43,7 @@ export function List<T>({
   height,
   itemHeight,
   items,
+  overscanItems = 0,
   rowRenderer,
 }: ListProps<T>) {
   const { disableVirtualization = false } = debugOptions
@@ -53,7 +65,7 @@ export function List<T>({
   ])
 
   const [state, setState] = React.useState<ListState>({
-    maxIdx: visibleItemCount,
+    maxIdx: visibleItemCount + overscanItems,
     minIdx: 0,
   })
   const { maxIdx, minIdx } = state
@@ -67,12 +79,12 @@ export function List<T>({
    */
   const updateVisibleItems = React.useCallback(
     (scrollTop = 0) => {
-      const newMinIdx = Math.floor(scrollTop / itemHeight)
-      const newMaxIdx = newMinIdx + visibleItemCount
+      const newMinIdx = Math.floor(scrollTop / itemHeight) - overscanItems
+      const newMaxIdx = newMinIdx + visibleItemCount + overscanItems * 2
 
       setState({ maxIdx: newMaxIdx, minIdx: newMinIdx })
     },
-    [itemHeight, visibleItemCount],
+    [itemHeight, overscanItems, visibleItemCount],
   )
 
   /**
@@ -103,6 +115,7 @@ export function List<T>({
   return (
     <div style={containerStyles} ref={containerEl}>
       <div style={listWrapperStyles}>
+        {/* TODO: use a for loop here, and only iterate over the necessary values */}
         {items.map((item, idx) => {
           // skip any rows that are outside our current viewport
           if (idx < minIdx || idx > maxIdx) {

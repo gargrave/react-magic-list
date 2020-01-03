@@ -97,6 +97,66 @@ describe('List', () => {
       expect(getByText('item--6')).toBeInTheDocument()
       expect(queryByText('item--7')).not.toBeInTheDocument()
     })
+
+    it('renders additional items when "overscan" is specified', () => {
+      const overscan = 2
+      const { container, getByText, queryByText } = render(
+        <List {...defaultProps} overscanItems={overscan} />,
+      )
+      let scrollTop = 0
+
+      const listEl = container.firstChild as HTMLElement
+      expect(listEl).not.toBeNull()
+
+      expect(container.querySelectorAll(`.${ITEM_CLASS}`)).toHaveLength(
+        defaultVisibleItemCount + overscan,
+      )
+      expect(getByText('item--1')).toBeInTheDocument()
+      expect(getByText('item--8')).toBeInTheDocument()
+      expect(queryByText('item--9')).not.toBeInTheDocument()
+
+      // scroll by "less than 1px of item height" and ensure nothing changed
+      scrollTop += ITEM_HEIGHT - 1
+      fireEvent.scroll(listEl, { target: { scrollTop } })
+      expect(container.querySelectorAll(`.${ITEM_CLASS}`)).toHaveLength(
+        defaultVisibleItemCount + overscan,
+      )
+      expect(getByText('item--1')).toBeInTheDocument()
+      expect(getByText('item--8')).toBeInTheDocument()
+      expect(queryByText('item--9')).not.toBeInTheDocument()
+
+      // scroll one more and ensure list has re-rendered correctly
+      scrollTop += 1
+      fireEvent.scroll(listEl, { target: { scrollTop } })
+      expect(container.querySelectorAll(`.${ITEM_CLASS}`)).toHaveLength(
+        defaultVisibleItemCount + overscan + 1,
+      )
+      expect(queryByText('item--1')).toBeInTheDocument()
+      expect(queryByText('item--8')).toBeInTheDocument()
+      expect(queryByText('item--9')).toBeInTheDocument()
+      expect(queryByText('item--10')).not.toBeInTheDocument()
+
+      // scroll two more item heights and ensure list has re-rendered correctly
+      scrollTop += ITEM_HEIGHT * 2
+      fireEvent.scroll(listEl, { target: { scrollTop } })
+      expect(container.querySelectorAll(`.${ITEM_CLASS}`)).toHaveLength(
+        defaultVisibleItemCount + overscan + 1,
+      )
+      expect(queryByText('item--1')).not.toBeInTheDocument()
+      expect(queryByText('item--2')).toBeInTheDocument()
+      expect(queryByText('item--10')).toBeInTheDocument()
+      expect(queryByText('item--11')).not.toBeInTheDocument()
+
+      // scroll back to zero and ensure we are back to original state
+      scrollTop = 0
+      fireEvent.scroll(listEl, { target: { scrollTop } })
+      expect(container.querySelectorAll(`.${ITEM_CLASS}`)).toHaveLength(
+        defaultVisibleItemCount + overscan,
+      )
+      expect(getByText('item--1')).toBeInTheDocument()
+      expect(getByText('item--8')).toBeInTheDocument()
+      expect(queryByText('item--9')).not.toBeInTheDocument()
+    })
   })
 
   describe('props', () => {
