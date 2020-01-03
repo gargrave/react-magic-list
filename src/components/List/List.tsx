@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { DEFAULT_GET_KEY } from './List.helpers'
 import {
   makeContainerStyles,
   makeListWrapperStyles,
@@ -13,6 +14,7 @@ export type DebugOptions = {
 
 export type ListProps<T> = {
   debugOptions?: DebugOptions
+  getKey?: (item: T, idx: number) => string | number
   height: number
   itemHeight: number
   items: T[]
@@ -26,6 +28,7 @@ export type ListState = {
 
 export function List<T>({
   debugOptions = {},
+  getKey = DEFAULT_GET_KEY,
   height,
   itemHeight,
   items,
@@ -100,7 +103,7 @@ export function List<T>({
   return (
     <div style={containerStyles} ref={containerEl}>
       <div style={listWrapperStyles}>
-        {items.map((data, idx) => {
+        {items.map((item, idx) => {
           // skip any rows that are outside our current viewport
           if (idx < minIdx || idx > maxIdx) {
             if (!disableVirtualization) {
@@ -111,14 +114,13 @@ export function List<T>({
           const top = idx * itemHeight
           const rowStyles = makeRowStyles({ top })
 
+          const key = getKey(item, idx)
           const props: RowProps<T> = {
-            data,
-            // TODO: add a getKey() prop to provide custom logic here
-            key: idx,
+            item,
             style: rowStyles,
           }
 
-          return rowRenderer(props)
+          return <React.Fragment key={key}>{rowRenderer(props)}</React.Fragment>
         })}
       </div>
     </div>

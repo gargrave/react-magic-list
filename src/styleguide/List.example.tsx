@@ -11,11 +11,11 @@ const generateItems = (count: number) =>
     .fill(0)
     .map(_ => ({ id: id++, value: uuid() }))
 
-const Row = ({ data, style }) => {
+const Row = ({ item, style }) => {
   return (
     <div className="listRow" style={style}>
-      <span className="listRow__id">{data.id}</span>
-      <span>{data.value}</span>
+      <span className="listRow__id">{item.id}</span>
+      <span>{item.value}</span>
     </div>
   )
 }
@@ -138,7 +138,7 @@ const Virtualized = () => {
 }
 
 export const Example = () => {
-  const [toggleView, setToggleView] = React.useState(false)
+  const [toggleView, setToggleView] = React.useState(true)
 
   const handleToggle = () => {
     id = 1
@@ -150,7 +150,12 @@ export const Example = () => {
       {toggleView ? <Virtualized /> : <NonVirtualized />}
       <hr />
       <div>
-        <input id="toggle" type="checkbox" onChange={handleToggle} />
+        <input
+          checked={toggleView}
+          id="toggle"
+          onChange={handleToggle}
+          type="checkbox"
+        />
         <label className="label-inline" htmlFor="toggle">
           Virtualized
         </label>

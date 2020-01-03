@@ -2,6 +2,8 @@ import * as React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { cleanup, fireEvent, render } from '@testing-library/react'
 
+import * as listHelpers from './List.helpers'
+
 import { List, ListProps } from './List'
 
 type Item = {
@@ -28,18 +30,17 @@ const items: Item[] = Array(ITEM_COUNT)
   .fill(0)
   .map(makeItem)
 
-const rowRenderer = ({ data }) => (
-  <div key={data.id} className={ITEM_CLASS}>
-    {data.value}
-  </div>
-)
+const rowRenderer = ({ item }) => <div className={ITEM_CLASS}>{item.value}</div>
 
 let defaultProps: ListProps<Item>
 
 describe('List', () => {
+  const defaultVisibleItemCount = LIST_HEIGHT / ITEM_HEIGHT + 1
+
   beforeEach(() => {
     jest.resetAllMocks()
     defaultProps = {
+      getKey: jest.fn((item, _idx) => item.id),
       height: LIST_HEIGHT,
       itemHeight: ITEM_HEIGHT,
       items,
@@ -59,9 +60,8 @@ describe('List', () => {
       const listEl = container.firstChild as HTMLElement
       expect(listEl).not.toBeNull()
 
-      const expectedItemCount = LIST_HEIGHT / ITEM_HEIGHT + 1
       expect(container.querySelectorAll(`.${ITEM_CLASS}`)).toHaveLength(
-        expectedItemCount,
+        defaultVisibleItemCount,
       )
       expect(getByText('item--1')).toBeInTheDocument()
       expect(getByText('item--6')).toBeInTheDocument()
@@ -96,6 +96,30 @@ describe('List', () => {
       expect(getByText('item--1')).toBeInTheDocument()
       expect(getByText('item--6')).toBeInTheDocument()
       expect(queryByText('item--7')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('props', () => {
+    let defaultGetKeySpy: jest.SpyInstance
+
+    beforeEach(() => {
+      defaultGetKeySpy = jest.spyOn(listHelpers, 'DEFAULT_GET_KEY')
+    })
+
+    describe('getKey', () => {
+      it('uses a default "getKey()" prop when none is provided', () => {
+        render(<List {...defaultProps} getKey={undefined} />)
+
+        expect(defaultGetKeySpy).toHaveBeenCalledTimes(defaultVisibleItemCount)
+      })
+
+      it('uses a custom "getKey()" prop when provided', () => {
+        const { getKey } = defaultProps
+        render(<List {...defaultProps} />)
+
+        expect(defaultGetKeySpy).toHaveBeenCalledTimes(0)
+        expect(getKey).toHaveBeenCalledTimes(defaultVisibleItemCount)
+      })
     })
   })
 })
