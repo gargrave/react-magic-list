@@ -115,7 +115,6 @@ export function List<T>({
   return (
     <div style={containerStyles} ref={containerEl}>
       <div style={listWrapperStyles}>
-        {/* TODO: use a for loop here, and only iterate over the necessary values */}
         {items.map((item, idx) => {
           // skip any rows that are outside our current viewport
           if (idx < minIdx || idx > maxIdx) {

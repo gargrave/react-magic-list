@@ -19,7 +19,7 @@
     "build:examples": "node ./src/scripts/buildExamples.js && yarn prettier:examples",
     "prettier:examples": "prettier --config ./.prettierrc --write 'src/components/List/styleguide/*.md'",
     "release": "yarn build && yarn np --yolo && yarn styleguide:build",
-    "lint": "eslint --ext .ts,.tsx ./src",
+    "lint": "eslint --ext .ts,.tsx,.jsx ./src",
     "test": "jest --watch",
     "styleguide": "styleguidist server",
     "styleguide:build": "yarn build:examples && styleguidist build"
