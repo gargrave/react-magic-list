@@ -1,12 +1,13 @@
+```jsx
 import * as React from 'react'
 import uuid from 'nanoid'
 
-import { List } from '../components/List'
+import { List } from '../List'
 
 const numFormat = Intl.NumberFormat('en-us').format
 
 let id = 1
-const generateItems = (count: number) =>
+const generateItems = count =>
   Array(count)
     .fill(0)
     .map(_ => ({ id: id++, value: uuid() }))
@@ -23,7 +24,7 @@ const Row = ({ item, style }) => {
 const NonVirtualized = () => {
   const INCREMENT = 500
 
-  const [state, setState] = React.useState<any>({
+  const [state, setState] = React.useState({
     rows: [],
     working: true,
   })
@@ -83,7 +84,7 @@ const NonVirtualized = () => {
 const Virtualized = () => {
   const INCREMENT = 5000
 
-  const [state, setState] = React.useState<any>({
+  const [state, setState] = React.useState({
     rows: [],
     working: true,
   })
@@ -139,7 +140,7 @@ const Virtualized = () => {
   )
 }
 
-export const Example = () => {
+const Example = () => {
   const [toggleView, setToggleView] = React.useState(true)
 
   const handleToggle = () => {
@@ -165,3 +166,6 @@ export const Example = () => {
     </>
   )
 }
+
+;<Example />
+```

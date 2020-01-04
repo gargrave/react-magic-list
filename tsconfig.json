@@ -17,7 +17,7 @@
     "config",
     "dist",
     "node_modules",
-    "src/styleguide",
+    "src/components/List/styleguide",
     "src/**/*.spec.*"
   ],
   "includes": ["src"]

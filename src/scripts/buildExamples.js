@@ -3,9 +3,8 @@ const path = require('path')
 
 const readFiles = require('./readFiles')
 
-const STYLEGUIDE_DIR = path.join(__dirname, '../styleguide')
-const COMPONENTS_DIR = path.join(__dirname, '../components/List')
-const OUT_FILE = path.join(COMPONENTS_DIR, 'List.md')
+const STYLEGUIDE_DIR = path.join(__dirname, '../components/List/styleguide')
+const OUT_FILE = path.join(STYLEGUIDE_DIR, 'ListStyleguide.md')
 
 let examplesWritten = 0
 
@@ -37,6 +36,6 @@ const handleComplete = () => {
 }
 
 readFiles(STYLEGUIDE_DIR, handleFileContent, {
-  fileFilter: /\.example\.tsx/,
+  fileFilter: /\.example\.[jt]sx/,
   onComplete: handleComplete,
 })

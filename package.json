@@ -1,7 +1,7 @@
 {
   "name": "@gargrave/react-magic-list",
   "version": "0.0.2",
-  "description": "A simple implementation of list virtualization in React",
+  "description": "A simple implementation of a virtualized list in React",
   "author": "Gabe Hargrave <gkhargrave@gmail.com>",
   "repository": "https://github.com/gargrave/react-magic-list",
   "license": "MIT",
@@ -16,11 +16,13 @@
     "prebuild": "jest && yarn clean:dist && yarn build:types",
     "build": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly",
-    "release": "yarn build && yarn np --yolo",
+    "build:examples": "node ./src/scripts/buildExamples.js && yarn prettier:examples",
+    "prettier:examples": "prettier --config ./.prettierrc --write 'src/components/List/styleguide/*.md'",
+    "release": "yarn build && yarn np --yolo && yarn styleguide:build",
     "lint": "eslint --ext .ts,.tsx ./src",
     "test": "jest --watch",
     "styleguide": "styleguidist server",
-    "styleguide:build": "styleguidist build"
+    "styleguide:build": "yarn build:examples && styleguidist build"
   },
   "peerDependencies": {
     "react": "^16.11.0",
